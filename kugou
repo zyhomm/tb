@@ -1,0 +1,19 @@
+# 酷狗概念版自动领取VIP--Eric
+# 每日9点自动领取VIP，第一使用打开酷狗概念版天天签到领VIP页面获取参数，提示获取成功即可，去除启动广告
+
+[filter_local]
+# 拦截广告请求
+url regex ^https://gateway\.kugou\.com/ads\.gateway/.* reject
+domain adservice.kugou.com reject
+domain install2.kugou.com reject
+
+[mitm]
+hostname = *.kugou.com
+
+[task_local]
+# 定时任务：每日9点自动领取VIP
+0 9 * * * https://gist.githubusercontent.com/Alex0510/1c389019c264a7d3ddbe4dbcf77d4295/raw/kugou_auto.js, tag=酷狗领取VIP, enabled=true
+
+[rewrite_local]
+# 处理酷狗请求数据
+https://gateway.kugou.com/youth/v1/(recharge/receive_vip_listen_song|activity/get_month_vip_record) url script-request-header https://gist.githubusercontent.com/Alex0510/1c389019c264a7d3ddbe4dbcf77d4295/raw/kugou.js
